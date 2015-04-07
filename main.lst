@@ -1,0 +1,219 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__ = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  10               		.text
+  11               	.Ltext0:
+ 115               	vBlinkLed:
+ 116               		.stabd	46,0,0
+   1:main.c        **** /******************************************************************************
+   2:main.c        ****  * Header file inclusions.
+   3:main.c        ****  ******************************************************************************/
+   4:main.c        **** 
+   5:main.c        **** #include "FreeRTOS.h"
+   6:main.c        **** #include "task.h"
+   7:main.c        **** 
+   8:main.c        **** #include <avr/io.h>
+   9:main.c        **** 
+  10:main.c        **** /******************************************************************************
+  11:main.c        ****  * Private macro definitions.
+  12:main.c        ****  ******************************************************************************/
+  13:main.c        **** 
+  14:main.c        **** #define mainLED_TASK_PRIORITY   (tskIDLE_PRIORITY)
+  15:main.c        **** 
+  16:main.c        **** /******************************************************************************
+  17:main.c        ****  * Private function prototypes.
+  18:main.c        ****  ******************************************************************************/
+  19:main.c        **** 
+  20:main.c        **** static void vBlinkLed(void* pvParameters);
+  21:main.c        **** 
+  22:main.c        **** /******************************************************************************
+  23:main.c        ****  * Public function definitions.
+  24:main.c        ****  ******************************************************************************/
+  25:main.c        **** 
+  26:main.c        **** /**************************************************************************//**
+  27:main.c        ****  * \fn int main(void)
+  28:main.c        ****  *
+  29:main.c        ****  * \brief Main function.
+  30:main.c        ****  *
+  31:main.c        ****  * \return
+  32:main.c        ****  ******************************************************************************/
+  33:main.c        **** int main(void)
+  34:main.c        **** {
+  35:main.c        ****     // Create task.
+  36:main.c        ****     xTaskHandle blink_handle;
+  37:main.c        ****     xTaskCreate
+  38:main.c        ****     (
+  39:main.c        ****         vBlinkLed,
+  40:main.c        ****         (signed char*)"blink",
+  41:main.c        ****         configMINIMAL_STACK_SIZE,
+  42:main.c        ****         NULL,
+  43:main.c        ****         mainLED_TASK_PRIORITY,
+  44:main.c        ****         &blink_handle
+  45:main.c        ****     );
+  46:main.c        **** 
+  47:main.c        ****     // Start scheduler.
+  48:main.c        ****     vTaskStartScheduler();
+  49:main.c        **** 
+  50:main.c        ****     return 0;
+  51:main.c        **** }
+  52:main.c        **** 
+  53:main.c        **** /**************************************************************************//**
+  54:main.c        ****  * \fn static vApplicationIdleHook(void)
+  55:main.c        ****  *
+  56:main.c        ****  * \brief
+  57:main.c        ****  ******************************************************************************/
+  58:main.c        **** void vApplicationIdleHook(void)
+  59:main.c        **** {
+  60:main.c        **** 
+  61:main.c        **** }
+  62:main.c        **** 
+  63:main.c        **** /******************************************************************************
+  64:main.c        ****  * Private function definitions.
+  65:main.c        ****  ******************************************************************************/
+  66:main.c        **** 
+  67:main.c        **** /**************************************************************************//**
+  68:main.c        ****  * \fn static void vBlinkLed(void* pvParameters)
+  69:main.c        ****  *
+  70:main.c        ****  * \brief
+  71:main.c        ****  *
+  72:main.c        ****  * \param[in]   pvParameters
+  73:main.c        ****  ******************************************************************************/
+  74:main.c        **** static void vBlinkLed(void* pvParameters)
+  75:main.c        **** {
+ 118               	.LM0:
+ 119               	.LFBB1:
+ 120 0000 1F93      		push r17
+ 121               	/* prologue: function */
+ 122               	/* frame size = 0 */
+ 123               	/* stack size = 1 */
+ 124               	.L__stack_usage = 1
+  76:main.c        ****     DDRB |= _BV(PB5);
+ 126               	.LM1:
+ 127 0002 259A      		sbi 36-32,5
+  77:main.c        **** 
+  78:main.c        ****     for ( ;; )
+  79:main.c        ****     {
+  80:main.c        ****         PORTB ^= _BV(PB5);
+ 129               	.LM2:
+ 130 0004 10E2      		ldi r17,lo8(32)
+ 131               	.L2:
+ 133               	.LM3:
+ 134 0006 85B1      		in r24,37-32
+ 135 0008 8127      		eor r24,r17
+ 136 000a 85B9      		out 37-32,r24
+  81:main.c        ****         vTaskDelay(1000);
+ 138               	.LM4:
+ 139 000c 88EE      		ldi r24,lo8(1000)
+ 140 000e 93E0      		ldi r25,hi8(1000)
+ 141 0010 0E94 0000 		call vTaskDelay
+ 142 0014 00C0      		rjmp .L2
+ 144               	.Lscope1:
+ 146               		.stabd	78,0,0
+ 147               		.data
+ 148               	.LC0:
+ 149 0000 626C 696E 		.string	"blink"
+ 149      6B00 
+ 150               		.text
+ 152               	.global	main
+ 154               	main:
+ 155               		.stabd	46,0,0
+  34:main.c        **** {
+ 157               	.LM5:
+ 158               	.LFBB2:
+ 159 0016 AF92      		push r10
+ 160 0018 BF92      		push r11
+ 161 001a CF92      		push r12
+ 162 001c DF92      		push r13
+ 163 001e EF92      		push r14
+ 164 0020 FF92      		push r15
+ 165 0022 0F93      		push r16
+ 166 0024 DF93      		push r29
+ 167 0026 CF93      		push r28
+ 168 0028 00D0      		rcall .
+ 169 002a CDB7      		in r28,__SP_L__
+ 170 002c DEB7      		in r29,__SP_H__
+ 171               	/* prologue: function */
+ 172               	/* frame size = 2 */
+ 173               	/* stack size = 11 */
+ 174               	.L__stack_usage = 11
+  37:main.c        ****     xTaskCreate
+ 176               	.LM6:
+ 177 002e 80E0      		ldi r24,lo8(gs(vBlinkLed))
+ 178 0030 90E0      		ldi r25,hi8(gs(vBlinkLed))
+ 179 0032 60E0      		ldi r22,lo8(.LC0)
+ 180 0034 70E0      		ldi r23,hi8(.LC0)
+ 181 0036 45E5      		ldi r20,lo8(85)
+ 182 0038 50E0      		ldi r21,hi8(85)
+ 183 003a 20E0      		ldi r18,lo8(0)
+ 184 003c 30E0      		ldi r19,hi8(0)
+ 185 003e 00E0      		ldi r16,lo8(0)
+ 186 0040 7E01      		movw r14,r28
+ 187 0042 0894      		sec
+ 188 0044 E11C      		adc r14,__zero_reg__
+ 189 0046 F11C      		adc r15,__zero_reg__
+ 190 0048 CC24      		clr r12
+ 191 004a DD24      		clr r13
+ 192 004c AA24      		clr r10
+ 193 004e BB24      		clr r11
+ 194 0050 0E94 0000 		call xTaskGenericCreate
+  48:main.c        ****     vTaskStartScheduler();
+ 196               	.LM7:
+ 197 0054 0E94 0000 		call vTaskStartScheduler
+  51:main.c        **** }
+ 199               	.LM8:
+ 200 0058 80E0      		ldi r24,lo8(0)
+ 201 005a 90E0      		ldi r25,hi8(0)
+ 202               	/* epilogue start */
+ 203 005c 0F90      		pop __tmp_reg__
+ 204 005e 0F90      		pop __tmp_reg__
+ 205 0060 CF91      		pop r28
+ 206 0062 DF91      		pop r29
+ 207 0064 0F91      		pop r16
+ 208 0066 FF90      		pop r15
+ 209 0068 EF90      		pop r14
+ 210 006a DF90      		pop r13
+ 211 006c CF90      		pop r12
+ 212 006e BF90      		pop r11
+ 213 0070 AF90      		pop r10
+ 214 0072 0895      		ret
+ 219               	.Lscope2:
+ 221               		.stabd	78,0,0
+ 223               	.global	vApplicationIdleHook
+ 225               	vApplicationIdleHook:
+ 226               		.stabd	46,0,0
+  59:main.c        **** {
+ 228               	.LM9:
+ 229               	.LFBB3:
+ 230               	/* prologue: function */
+ 231               	/* frame size = 0 */
+ 232               	/* stack size = 0 */
+ 233               	.L__stack_usage = 0
+ 234               	/* epilogue start */
+  61:main.c        **** }
+ 236               	.LM10:
+ 237 0074 0895      		ret
+ 239               	.Lscope3:
+ 241               		.stabd	78,0,0
+ 243               	.Letext0:
+ 244               	.global __do_copy_data
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+     /tmp/ccdJ3AKf.s:2      *ABS*:0000003f __SREG__
+     /tmp/ccdJ3AKf.s:3      *ABS*:0000003e __SP_H__
+     /tmp/ccdJ3AKf.s:4      *ABS*:0000003d __SP_L__
+     /tmp/ccdJ3AKf.s:5      *ABS*:00000034 __CCP__
+     /tmp/ccdJ3AKf.s:6      *ABS*:00000000 __tmp_reg__
+     /tmp/ccdJ3AKf.s:7      *ABS*:00000001 __zero_reg__
+     /tmp/ccdJ3AKf.s:115    .text:00000000 vBlinkLed
+     /tmp/ccdJ3AKf.s:154    .text:00000016 main
+     /tmp/ccdJ3AKf.s:225    .text:00000074 vApplicationIdleHook
+
+UNDEFINED SYMBOLS
+vTaskDelay
+xTaskGenericCreate
+vTaskStartScheduler
+__do_copy_data
